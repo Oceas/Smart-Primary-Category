@@ -79,8 +79,8 @@ class SPC_Primary_Category_Meta_Data
          * Return Categories Picker
          */
 
-        $picker_html = '<p>In order to assign a new parent category you must save the post with at least one category assigned first and refresh the page</p>';
-        $picker_html .= "<p>Current Previous Parent Category <b>{$primary_category}</b>";
+        $picker_html = '<p>In order to assign a parent category to the post it must have previously been assigned to it in a prior save.</p>';
+        $picker_html .= "<p>Current Parent Category <b>{$primary_category}</b>";
 
         $picker_html .= '<select style="width:100%;" name="primary_category">';
 

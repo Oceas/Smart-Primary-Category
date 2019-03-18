@@ -1,3 +1,4 @@
+
 <?php while ($desired_category_posts->have_posts()) : $desired_category_posts->the_post(); ?>
     <div class="spc-primary-category-container">
         <div class="spc-title">

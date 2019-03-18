@@ -33,10 +33,13 @@ class SPC_Primary_Category_Shortcode
 
         $desired_category_posts = new WP_Query($args);
 
+
         /*
          * Return Display of All Categories In List
          */
+        ob_start();
         include dirname( __FILE__ ) . '/templates/spc-post-list.php';
+        return ob_get_clean();
     }
 
 }
