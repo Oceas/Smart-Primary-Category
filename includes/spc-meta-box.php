@@ -5,12 +5,13 @@
  * Add primary category meta box to all post and custom post types.
  */
 
-class SPC_Meta_Box
+class SPC_Primary_Category_Meta_Data
 {
 
     public function __construct()
     {
         add_action('add_meta_boxes', array($this, 'spc_add_meta_box_to_posts'));
+        add_action('save_post', array($this, 'spc_update_post_meta_data'));
     }
 
     public function spc_add_meta_box_to_posts()
@@ -44,7 +45,62 @@ class SPC_Meta_Box
 
     public function spc_meta_box_dropdown()
     {
-        echo 'Hello World';
+        global $post;
+
+        /*
+         * Fetch MetaData
+         */
+
+        $primary_category = get_post_meta($post->ID, 'primary_category', true);
+
+        /*
+         * Fetch All Post Categories
+         */
+
+        $post_categories_ids = wp_get_post_categories($post->ID);
+        $post_categories = array();
+
+        foreach ($post_categories_ids as $category_id) {
+            $category = get_category($category_id);
+            $post_categories[] = $category->name;
+        }
+
+        /*
+         * If Primary Category Doens't Exist Add Blank Option To Available Categories To Keep Optional
+         */
+
+        if ('' === $primary_category) {
+            array_unshift($post_categories, 'None');
+        }
+
+        /*
+         * Return Categories Picker
+         */
+
+        $picker_html = '<p>In order to assign a new parent category you must save the post with at least one category assigned first and refresh the page</p>';
+        $picker_html .= "<p>Current Previous Parent Category <b>{$primary_category}</b>";
+
+        $picker_html .= '<select style="width:100%;" name="primary_category">';
+
+        foreach ($post_categories as $category) {
+            $active_category = selected( $primary_category, $category, false );
+            $picker_html .= "<option value='{$category}' {$active_category}>$category</option>";
+        }
+
+        $picker_html .= '</select>';
+        echo $picker_html;
+    }
+
+    public function spc_update_post_meta_data()
+    {
+        global $post;
+        /*
+         * Check If Primary Category Was Set In Meta Box
+         */
+        if (isset($_POST['primary_category'])) {
+            $primary_category = sanitize_text_field($_POST['primary_category']);
+            update_post_meta($post->ID, 'primary_category', $primary_category);
+        }
     }
 
 }
