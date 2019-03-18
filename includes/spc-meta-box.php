@@ -1,33 +1,50 @@
 <?php
 
-class Episcopal_VOTD
+
+/*
+ * Add primary category meta box to all post and custom post types.
+ */
+
+class SPC_Meta_Box
 {
-    public function __construct() {
 
-        add_shortcode( 'myepiscopal-votd', array( $this, 'episcopal_votd' ));
-
+    public function __construct()
+    {
+        add_action('add_meta_boxes', array($this, 'spc_add_meta_box_to_posts'));
     }
 
-    function episcopal_call($endpoint, $args = 'null', $method = 'GET')
+    public function spc_add_meta_box_to_posts()
     {
-        //Populate the correct endpoint for the API request
-        $url = "https://api.myepiscopal.com/api/{$endpoint}";
-        //Make the call and store the response in $res
-        $res = wp_remote_get($url);
-        //Check for success
-        if (!is_wp_error($res) && ($res['response']['code'] == 200 || $res['response']['code'] == 201)) {
-            return json_decode($res['body']);
-        } else {
-            return false;
+        /*
+         * Fetch All Post Types
+         */
+        $post_types = get_post_types();
+
+        /*
+         * Assign MetaBox
+         */
+        foreach ($post_types as $post_type) {
+
+            /*
+             * Do Not Assign to Pages
+             */
+            if ('page' === $post_type) {
+                continue;
+            }
+            add_meta_box(
+                'smart_primary_category',
+                'Primary Category',
+                array($this, 'spc_meta_box_dropdown'),
+                $post_type,
+                'side',
+                'high'
+            );
         }
     }
-    function episcopal_votd($attributes)
+
+    public function spc_meta_box_dropdown()
     {
-        $response = get_transient('votd_response');
-        if (!$response) {
-            $response = episcopal_call('verses/votd');
-            set_transient('votd_response', $response, DAY_IN_SECONDS);
-        }
-        return sprintf('<p>%s - %s</p>', $response->verse, $response->reading);
+        echo 'Hello World';
     }
+
 }

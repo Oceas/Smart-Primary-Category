@@ -24,8 +24,7 @@ define('SPC_PATH', plugin_dir_path(__FILE__));
  * @TODO Create Meta Box for Parent Post
  */
 include SPC_PATH . 'includes/spc-meta-box.php';
-
-$episcopal_votd = new SPC_Meta_Box();
+$spec_meta_box = new SPC_Meta_Box();
 
 /*
  * @TODO Create Shortcode to display posts by Parent Category
