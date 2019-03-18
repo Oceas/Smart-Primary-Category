@@ -21,8 +21,6 @@ class SPC_Primary_Category_Shortcode
          * Get All Posts with That Primary Category
          */
 
-
-        /*Get All Links Defined for The Source URL */
         $args = array(
             'meta_key' => 'primary_category',
             'meta_value' => $primary_category["category"],
