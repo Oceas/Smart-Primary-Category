@@ -65,12 +65,14 @@ class SPC_Primary_Category_Meta_Data
             $post_categories[] = $category->name;
         }
 
+        array_unshift($post_categories, 'None');
+
         /*
-         * If Primary Category Doens't Exist Add Blank Option To Available Categories To Keep Optional
+         * If Primary Category Doens't Exist Mark None
          */
 
         if ('' === $primary_category) {
-            array_unshift($post_categories, 'None');
+            $primary_category = 'None';
         }
 
         /*
