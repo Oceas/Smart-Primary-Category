@@ -11,7 +11,7 @@ Simply edit a post of your choosing and at the bottom of your edit side bar sele
 Note: In order to assign a parent category to the post it must have previously been assigned to it in a prior save.
 
 
-![Editing Screen](picker.png)
+![Editing Screen](assets/images/picker.png)
 ## Display Posts
 
 To display the posts of your desired parent category simply use the following Shortcode.
@@ -19,4 +19,4 @@ To display the posts of your desired parent category simply use the following Sh
 ```
 [spc-posts-by-category category="Worship"]
 ```
-![Front End Screen](posts.png)
+![Front End Screen](assets/images/posts.png)
