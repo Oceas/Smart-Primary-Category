@@ -22,14 +22,14 @@ define('SPC_PATH', plugin_dir_path(__FILE__));
  */
 
 include SPC_PATH . 'includes/spc-meta-box.php';
-$spec_meta_box = new SPC_Primary_Category_Meta_Data();
+$spc_meta_data = new SPC_Primary_Category_Meta_Data();
 
 /*
  * Create Shortcode to display posts by Parent Category
  */
 
 include SPC_PATH . 'includes/spc-short-code.php';
-$spec_meta_box = new SPC_Primary_Category_Shortcode();
+$spc_shortcode = new SPC_Primary_Category_Shortcode();
 
 // RMS 12:2
 ?>

@@ -48,45 +48,42 @@ class SPC_Primary_Category_Meta_Data
         global $post;
 
         /*
-         * Fetch MetaData
+         * Fetch MetaData that is stored as category id in case category name changes
          */
 
-        $primary_category = get_post_meta($post->ID, 'primary_category', true);
-
-        /*
-         * Fetch All Post Categories
-         */
-
-        $post_categories_ids = wp_get_post_categories($post->ID);
-        $post_categories = array();
-
-        foreach ($post_categories_ids as $category_id) {
-            $category = get_category($category_id);
-            $post_categories[] = $category->name;
-        }
-
-        array_unshift($post_categories, 'None');
+        $primary_category_id = get_post_meta($post->ID, 'primary_category', true);
 
         /*
          * If Primary Category Doens't Exist Mark None
          */
 
-        if ('' === $primary_category) {
-            $primary_category = 'None';
+        if ('' === $primary_category_id) {
+            $primary_category_id = -1;
         }
+
+        /*
+         * Fetch All Categories
+         */
+
+        $args = array(
+            "hide_empty" => 0,
+            "type" => "post",
+            "orderby" => "name",
+            "order" => "ASC"
+        );
+
+        $all_categories = get_categories($args);
 
         /*
          * Return Categories Picker
          */
 
-        $picker_html = '<p>In order to assign a parent category to the post it must have previously been assigned to it in a prior save.</p>';
-        $picker_html .= "<p>Current Parent Category <b>{$primary_category}</b>";
-
+        $picker_html = "<p>Current Primary Category ID <b>{$primary_category_id}</b>";
         $picker_html .= '<select style="width:100%;" name="primary_category">';
-
-        foreach ($post_categories as $category) {
-            $active_category = selected( $primary_category, $category, false );
-            $picker_html .= "<option value='{$category}' {$active_category}>$category</option>";
+        $picker_html .= "<option value='-1'>None</option>";
+        foreach ($all_categories as $category) {
+            $active_category = selected($primary_category_id, $category->cat_ID, false);
+            $picker_html .= "<option value='{$category->cat_ID}' {$active_category}>$category->name (ID: {$category->cat_ID})</option>";
         }
 
         $picker_html .= '</select>';
@@ -96,11 +93,21 @@ class SPC_Primary_Category_Meta_Data
     public function spc_update_post_meta_data()
     {
         global $post;
+
         /*
          * Check If Primary Category Was Set In Meta Box
          */
         if (isset($_POST['primary_category'])) {
-            $primary_category = sanitize_text_field($_POST['primary_category']);
+
+            $primary_category = (int) sanitize_text_field($_POST['primary_category']);
+
+            /*
+             * Add Primary Category to post in case it didn't exist.
+             */
+            if (-1 !== $primary_category) {
+                wp_set_post_categories( $post->ID, [$primary_category], true );
+            }
+
             update_post_meta($post->ID, 'primary_category', $primary_category);
         }
     }
