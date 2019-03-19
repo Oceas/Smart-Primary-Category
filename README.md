@@ -6,17 +6,24 @@ Many publishers use categories as a means to logically organize their content. H
 
 
 ## Asssign a Parent Category
-Simply edit a post of your choosing and at the bottom of your edit side bar select your desired parent category and save/update the post.
+Simply create or edit a post of your choosing and at the bottom of your edit side bar select your desired parent category and publish/update the post.
 
-Note: In order to assign a parent category to the post it must have previously been assigned to it in a prior save.
+Note: If the chosen parent category isn't apart apart of the existing post it will be assigned on save.
 
 
-![Editing Screen](assets/images/picker.png)
+![Editing Screen](assets/images/new-picker.png)
 ## Display Posts
 
-To display the posts of your desired parent category simply use the following Shortcode.
+To display the posts of your desired parent category simply use one of the following Shortcode Formats.
+
+Note: We encourage you to use the first shortcode by id. In the event of a category name change the posts will still render. Choosing to render by name will require you to update the shortcode in the event of renaming the category.
+```
+[spc-posts-by-category id=2]
+```
 
 ```
 [spc-posts-by-category category="Worship"]
 ```
+
+
 ![Front End Screen](assets/images/posts.png)
